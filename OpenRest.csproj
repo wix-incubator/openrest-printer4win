@@ -66,6 +66,18 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>.\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="openrest4com">
+      <HintPath>.\openrest4com.dll</HintPath>
+    </Reference>
+    <Reference Include="openrest4net-api">
+      <HintPath>.\openrest4net-api.dll</HintPath>
+    </Reference>
+    <Reference Include="openrest4net-client">
+      <HintPath>.\openrest4net-client.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -99,7 +111,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="OpenRest_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -112,20 +123,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\logo.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\openrest4com\openrest4com.csproj">
-      <Project>{EB94DFC0-C504-43CB-99E1-C7603E20E02A}</Project>
-      <Name>openrest4com</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\openrest4net-api\openrest4net-api.csproj">
-      <Project>{7B0A1D8E-7519-489A-B120-15099F794005}</Project>
-      <Name>openrest4net-api</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\openrest4net-client\openrest4net-client.csproj">
-      <Project>{E254B74F-E2D7-402F-A19A-F12F6D29702D}</Project>
-      <Name>openrest4net-client</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icon.ico" />

@@ -22,11 +22,10 @@ namespace OpenRest
         private System.Timers.Timer refreshTimer;
         private String accessToken = null;
 
-        private static string REGISTRY_NAME = "HKEY_CURRENT_USER\\OpenRest";
+        private static string REGISTRY_NAME = "HKEY_CURRENT_USER\\Software\\OpenRest";
         private static string USERNAME = "username";
         private static string PASSWORD = "password";
         private static string PRINTED = "printed";
-       // private static string REGISTRY_PRINTER_NAME = "PrinterName";
 
         private WebBrowser browser = new WebBrowser();
         private com.openrest.v1_1.OpenrestClient client = new com.openrest.v1_1.OpenrestClient(new System.Uri("https://api.openrest.com/v1.1"));
@@ -46,16 +45,14 @@ namespace OpenRest
             refreshTimer.Elapsed += new ElapsedEventHandler(refreshTimer_Elapsed);
 
             browser.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(browser_DocumentCompleted);
-            // Setup list of printers
-            /*foreach (string printer in System.Drawing.Printing.PrinterSettings.InstalledPrinters)
-            {
-                Printers.Items.Add(printer);
-            }
 
-            Printers.SelectedItem = Registry.GetValue(REGISTRY_NAME, REGISTRY_PRINTER_NAME, "");
-            System.Drawing.Printing.PrinterSettings.*/
             String s = (String)Registry.GetValue(REGISTRY_NAME, PRINTED, "");
-            printed = s.Split(new char[]{','}).ToList();
+
+            if (s == null)
+            {
+                s = "";
+            }
+            printed = s.Split(new char[] { ',' }).ToList();
         }
 
         void refreshTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -218,10 +215,33 @@ namespace OpenRest
                     String username = (String)Registry.GetValue(REGISTRY_NAME, USERNAME, "");
                     String password = (String)Registry.GetValue(REGISTRY_NAME, PASSWORD, "");
 
+                    String[] conf = null;
+
+                    if (System.IO.File.Exists("OpenRest.cfg"))
+                    {
+                        conf = System.IO.File.ReadAllLines("OpenRest.cfg");
+                    }
+
+                    if (conf != null)
+                    {
+                        if ((username == null) || (username == ""))
+                        {
+                            username = conf[0];
+                        }
+
+                        if ((password == null) || (password == ""))
+                        {
+                            if (conf.Length > 1)
+                            {
+                                password = conf[1];
+                            }
+                        }
+                    }
+
                     textBox1.Text = username;
                     textBox2.Text = password;
 
-                    if ((username != "") && (password != ""))
+                    if ((username != null) && (password != null) && (username != "") && (password != ""))
                     {
                         Connect_Click(null, null);
                     }
@@ -281,17 +301,27 @@ namespace OpenRest
                     try
                     {
                         RolesResponse response = client.Request<RolesResponse>(request);
+
+                        if (response.roles.Count == 0)
+                        {
+                            loginError.Text = "Error logining in. Please check username and password.";
+                            this.Show();
+                            this.WindowState = FormWindowState.Normal;
+                            return;
+                        }
                     }
                     catch (OpenrestException e2)
                     {
                         loginError.Text = "Error logining in. Please check username and password.";
                         this.Show();
+                        this.WindowState = FormWindowState.Normal; 
                         return;
                     }
                     catch (Exception e2)
                     {
                         loginError.Text = "Connection problem. " + e2.Message;
                         this.Show();
+                        this.WindowState = FormWindowState.Normal; 
                         return;
                     }
 

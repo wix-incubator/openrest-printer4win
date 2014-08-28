@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Timers;
 using Microsoft.Win32;
 using com.openrest.v1_1;
+using com.openrest.packages;
 using System.Diagnostics;
 using System.Threading;
 

@@ -12,6 +12,7 @@ using com.openrest.v1_1;
 using com.openrest.packages;
 using System.Diagnostics;
 using System.Threading;
+using System.Net;
 
 namespace OpenRest
 {
@@ -27,6 +28,8 @@ namespace OpenRest
         private static string USERNAME = "username";
         private static string PASSWORD = "password";
         private static string PRINTED = "printed";
+
+        private static string VERSION = "0.1";
 
         private WebBrowser browser = new WebBrowser();
         private com.openrest.v1_1.OpenrestClient client = new com.openrest.v1_1.OpenrestClient(new System.Uri("https://api.openrest.com/v1.1"));
@@ -58,6 +61,10 @@ namespace OpenRest
 
         void refreshTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            refreshTimer.Interval = 20000;
+
+            checkForUpdates();
+
             if (!loggedIn) return;
 
             this.BeginInvoke(new MethodInvoker(delegate()
@@ -118,6 +125,62 @@ namespace OpenRest
 
                 printNext();
             }));
+        }
+
+        private void checkForUpdates()
+        {
+            PackagesClient client = new PackagesClient();
+
+            GetProjectRequest request = new GetProjectRequest();
+            request.projectId = "com.openrest.olo.printer4win";
+
+            Project project = client.Request<Project>(request);
+
+            if (project.packages.Count == 0)
+            {
+                return;
+            }
+
+            Package[] sorted = project.packages.ToArray();
+            Array.Sort(sorted, new Comparison<Package>(delegate(Package p1, Package p2) {
+                if (p2.created.Value > p1.created.Value) return 1; else return -1;
+            }));
+
+            Package latest = sorted[0];
+
+            if (System.IO.File.Exists("install.bat"))
+            {
+                System.IO.File.Delete("install.bat");
+            }
+
+            if (latest.id != VERSION)
+            {
+                notifyIcon.ShowBalloonTip(5000, "OpenRest", "New version. Upgrading.", ToolTipIcon.Info);
+                foreach (string blobName in latest.blobs.Keys)
+                {
+                    Blob blob = latest.blobs[blobName];
+                    using (WebClient webclient = new WebClient()) {
+                        try
+                        {
+                            webclient.DownloadFile(blob.url, blobName);
+                        }
+                        catch (Exception e) { }
+                    }
+                }
+
+                if (!System.IO.File.Exists("install.bat"))
+                {
+                    System.IO.File.WriteAllLines("install.bat", new string[]{
+                        "timeout /t 5",
+                        "mv OpenRest.ex_ OpenRest.exe",
+                        "start \"\" \"OpenRest.exe\""
+                    });
+                }
+
+                Process.Start("install.bat");
+                Thread.Sleep(100);
+                Application.Exit();
+            }
         }
 
         private void printNext()
@@ -213,6 +276,8 @@ namespace OpenRest
             {
                 this.BeginInvoke(new MethodInvoker(delegate()
                 {
+                    checkForUpdates();
+
                     String username = (String)Registry.GetValue(REGISTRY_NAME, USERNAME, "");
                     String password = (String)Registry.GetValue(REGISTRY_NAME, PASSWORD, "");
 
@@ -335,6 +400,7 @@ namespace OpenRest
                     loginpanel.Hide();
                     loggedinpanel.Show();
                     loggedIn = true;
+                    refreshTimer.Interval = 1000;
                     refreshTimer.Stop();
                     refreshTimer.Start();
                     printing = false;

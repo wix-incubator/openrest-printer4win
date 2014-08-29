@@ -29,7 +29,7 @@ namespace OpenRest
         private static string PASSWORD = "password";
         private static string PRINTED = "printed";
 
-private static string VERSION = "0.4";
+private static string VERSION = "1";
 
         private WebBrowser browser = new WebBrowser();
         private com.openrest.v1_1.OpenrestClient client = new com.openrest.v1_1.OpenrestClient(new System.Uri("https://api.openrest.com/v1.1"));
@@ -99,7 +99,7 @@ private static string VERSION = "0.4";
                     notifyIcon.ShowBalloonTip(5000, "OpenRest", "Connection Error! "+e2.ErrorMessage, ToolTipIcon.Error);
                     return;
                 }
-                catch (Exception e2)
+                catch (Exception)
                 {
                     ConnectionStatus.Text = "Connection: ×";
                     connectionStatus = false;
@@ -166,7 +166,7 @@ private static string VERSION = "0.4";
                         {
                             webclient.DownloadFile(blob.url, blobName);
                         }
-                        catch (Exception e) { }
+                        catch (Exception) { }
                     }
                 }
 
@@ -277,6 +277,8 @@ private static string VERSION = "0.4";
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            LoadOnStartup.Checked = GetStartup();
+
             notifyIcon.ShowBalloonTip(5000, "OpenRest", "Version " + VERSION + ".", ToolTipIcon.Info);
 
             BackgroundWorker worker = new BackgroundWorker();
@@ -334,8 +336,13 @@ private static string VERSION = "0.4";
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            if (FormWindowState.Minimized == WindowState) {
-                Hide();
+            if (FormWindowState.Minimized == WindowState)
+            {
+                this.ShowInTaskbar = false;
+            }
+            else
+            {
+                this.ShowInTaskbar = true;
             }
         }
 
@@ -353,13 +360,51 @@ private static string VERSION = "0.4";
 
         private void close_Click(object sender, EventArgs e)
         {
-            Hide();
+            WindowState = FormWindowState.Minimized;
         }
 
         private void Connect_Click(object sender, EventArgs e)
         {
             string username = textBox1.Text;
             string password = textBox2.Text;
+
+            if (username.Contains("@"))
+            {
+                loginWithUsernamePassword(username, password, username);
+            }
+            else
+            {
+                loginWithAlias(username, password);
+            }
+        }
+
+        private void loginWithAlias(string alias, string password)
+        {
+            GetAppMappedObjectRequest request = new GetAppMappedObjectRequest();
+            request.appId = new AppId("com.openrest", alias, "0");
+            request.full = false;
+
+            try
+            {
+                Organization organization = client.Request<Organization>(request);
+                loginWithUsernamePassword(organization.id, password, alias);
+            }
+            catch (OpenrestException)
+            {
+                loginError.Text = "Error logining in. Please check username and password.";
+                this.Show();
+                this.WindowState = FormWindowState.Normal; 
+            }
+            catch (Exception)
+            {
+                loginError.Text = "Error logining in. Please check username and password.";
+                this.Show();
+                this.WindowState = FormWindowState.Normal; 
+            }
+        }
+
+        private void loginWithUsernamePassword(string username, string password, string storedUsername) 
+        {
             GetRolesRequest request = new GetRolesRequest();
             
             accessToken = "spice|" + username + "|" + password;
@@ -385,7 +430,7 @@ private static string VERSION = "0.4";
                             return;
                         }
                     }
-                    catch (OpenrestException e2)
+                    catch (OpenrestException)
                     {
                         loginError.Text = "Error logining in. Please check username and password.";
                         this.Show();
@@ -400,7 +445,7 @@ private static string VERSION = "0.4";
                         return;
                     }
 
-                    Registry.SetValue(REGISTRY_NAME, USERNAME, username);
+                    Registry.SetValue(REGISTRY_NAME, USERNAME, storedUsername);
                     Registry.SetValue(REGISTRY_NAME, PASSWORD, password);
 
                     ordersSince = 0;
@@ -426,6 +471,7 @@ private static string VERSION = "0.4";
 
             textBox2.Text = "";
 
+            connectionStatus = false;
             loggedIn = false;
             loggedinpanel.Hide();
             loginpanel.Show();
@@ -447,19 +493,19 @@ private static string VERSION = "0.4";
             {
                 Process.Start("chrome", "https://apps.openrest.com/");
             }
-            catch (Exception e2)
+            catch (Exception)
             {
                 try
                 {
                     Process.Start("firefox", "https://apps.openrest.com/");
                 }
-                catch (Exception e3)
+                catch (Exception)
                 {
                     try
                     {
                         Process.Start("https://apps.openrest.com/");
                     }
-                    catch (Exception e4)
+                    catch (Exception)
                     {
                     }
                 }
@@ -473,6 +519,31 @@ private static string VERSION = "0.4";
             if (result == DialogResult.Yes) {
                 Application.Exit();
             }
+        }
+
+        private void SetStartup(bool set)
+        {
+            RegistryKey rk = Registry.CurrentUser.OpenSubKey
+                ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+            if (set)
+                rk.SetValue("OpenRest", Application.ExecutablePath.ToString());
+            else
+                rk.DeleteValue("OpenRest", false);
+        }
+
+        private bool GetStartup()
+        {
+            RegistryKey rk = Registry.CurrentUser.OpenSubKey
+                ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+            if (rk.GetValue("OpenRest", null) == null) return false;
+            return true;
+        }
+
+        private void LoadOnStartup_CheckedChanged(object sender, EventArgs e)
+        {
+            SetStartup(LoadOnStartup.Checked);
         }
     }
 }

@@ -40,12 +40,13 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.close = new System.Windows.Forms.Label();
             this.loggedinpanel = new System.Windows.Forms.Panel();
+            this.ShowDownButton = new System.Windows.Forms.Label();
             this.OpenSite = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.ConfigurePrinter = new System.Windows.Forms.Label();
             this.ConnectionStatus = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.ShowDownButton = new System.Windows.Forms.Label();
+            this.LoadOnStartup = new System.Windows.Forms.CheckBox();
             this.loginpanel.SuspendLayout();
             this.loggedinpanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -168,6 +169,19 @@
             this.loggedinpanel.TabIndex = 1;
             this.loggedinpanel.Visible = false;
             // 
+            // ShowDownButton
+            // 
+            this.ShowDownButton.AutoSize = true;
+            this.ShowDownButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ShowDownButton.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ShowDownButton.ForeColor = System.Drawing.Color.White;
+            this.ShowDownButton.Location = new System.Drawing.Point(289, 187);
+            this.ShowDownButton.Name = "ShowDownButton";
+            this.ShowDownButton.Size = new System.Drawing.Size(63, 13);
+            this.ShowDownButton.TabIndex = 6;
+            this.ShowDownButton.Text = "Shutdown";
+            this.ShowDownButton.Click += new System.EventHandler(this.ShowDownButton_Click);
+            // 
             // OpenSite
             // 
             this.OpenSite.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -229,30 +243,33 @@
             this.pictureBox1.TabIndex = 5;
             this.pictureBox1.TabStop = false;
             // 
-            // ShowDownButton
+            // LoadOnStartup
             // 
-            this.ShowDownButton.AutoSize = true;
-            this.ShowDownButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ShowDownButton.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ShowDownButton.ForeColor = System.Drawing.Color.White;
-            this.ShowDownButton.Location = new System.Drawing.Point(289, 187);
-            this.ShowDownButton.Name = "ShowDownButton";
-            this.ShowDownButton.Size = new System.Drawing.Size(63, 13);
-            this.ShowDownButton.TabIndex = 6;
-            this.ShowDownButton.Text = "Shutdown";
-            this.ShowDownButton.Click += new System.EventHandler(this.ShowDownButton_Click);
+            this.LoadOnStartup.AutoSize = true;
+            this.LoadOnStartup.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.LoadOnStartup.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LoadOnStartup.ForeColor = System.Drawing.Color.White;
+            this.LoadOnStartup.Location = new System.Drawing.Point(8, 230);
+            this.LoadOnStartup.Name = "LoadOnStartup";
+            this.LoadOnStartup.Size = new System.Drawing.Size(167, 17);
+            this.LoadOnStartup.TabIndex = 6;
+            this.LoadOnStartup.Text = "Load on windows startup";
+            this.LoadOnStartup.UseVisualStyleBackColor = true;
+            this.LoadOnStartup.CheckedChanged += new System.EventHandler(this.LoadOnStartup_CheckedChanged);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(0)))), ((int)(((byte)(33)))));
-            this.ClientSize = new System.Drawing.Size(390, 230);
+            this.ClientSize = new System.Drawing.Size(390, 253);
+            this.Controls.Add(this.LoadOnStartup);
             this.Controls.Add(this.close);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.loggedinpanel);
             this.Controls.Add(this.loginpanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.ShowIcon = false;
@@ -290,6 +307,7 @@
         private System.Windows.Forms.Label loginError;
         private System.Windows.Forms.Button OpenSite;
         private System.Windows.Forms.Label ShowDownButton;
+        private System.Windows.Forms.CheckBox LoadOnStartup;
     }
 }
 

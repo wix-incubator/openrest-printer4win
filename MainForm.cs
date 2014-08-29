@@ -48,6 +48,7 @@ private static string VERSION = "1";
             refreshTimer = new System.Timers.Timer(2000);
             refreshTimer.Elapsed += new ElapsedEventHandler(refreshTimer_Elapsed);
 
+            browser.DocumentText = "<html><body></body></html>";
             browser.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(browser_DocumentCompleted);
 
             String s = (String)Registry.GetValue(REGISTRY_NAME, PRINTED, "");
@@ -270,6 +271,7 @@ private static string VERSION = "1";
 
         void browser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
+            if (browser.DocumentText == "<html><body></body></html>") return;
             ((WebBrowser)sender).Print();
             printing = false;
             printNext();

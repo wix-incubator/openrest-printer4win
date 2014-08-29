@@ -29,7 +29,7 @@ namespace OpenRest
         private static string PASSWORD = "password";
         private static string PRINTED = "printed";
 
-        private static string VERSION = "0.1";
+private static string VERSION = "0.2";
 
         private WebBrowser browser = new WebBrowser();
         private com.openrest.v1_1.OpenrestClient client = new com.openrest.v1_1.OpenrestClient(new System.Uri("https://api.openrest.com/v1.1"));
@@ -62,6 +62,8 @@ namespace OpenRest
         void refreshTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             refreshTimer.Interval = 20000;
+            refreshTimer.Stop();
+            refreshTimer.Start();
 
             checkForUpdates();
 
@@ -155,7 +157,7 @@ namespace OpenRest
 
             if (latest.id != VERSION)
             {
-                notifyIcon.ShowBalloonTip(5000, "OpenRest", "New version. Upgrading.", ToolTipIcon.Info);
+                notifyIcon.ShowBalloonTip(5000, "OpenRest", "New version ("+latest.id+"). Upgrading.", ToolTipIcon.Info);
                 foreach (string blobName in latest.blobs.Keys)
                 {
                     Blob blob = latest.blobs[blobName];
@@ -171,8 +173,8 @@ namespace OpenRest
                 if (!System.IO.File.Exists("install.bat"))
                 {
                     System.IO.File.WriteAllLines("install.bat", new string[]{
-                        "timeout /t 5",
-                        "mv OpenRest.ex_ OpenRest.exe",
+                        "timeout /t 3",
+                        "move OpenRest.ex_ OpenRest.exe",
                         "start \"\" \"OpenRest.exe\""
                     });
                 }
@@ -270,6 +272,8 @@ namespace OpenRest
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            notifyIcon.ShowBalloonTip(5000, "OpenRest", "Version " + VERSION + ".", ToolTipIcon.Info);
+
             BackgroundWorker worker = new BackgroundWorker();
 
             worker.DoWork += delegate
@@ -454,6 +458,15 @@ namespace OpenRest
                     {
                     }
                 }
+            }
+        }
+
+        private void ShowDownButton_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you want to shutdown the service? Orders will not be printed.", "OpenRest", MessageBoxButtons.YesNo);
+
+            if (result == DialogResult.Yes) {
+                Application.Exit();
             }
         }
     }

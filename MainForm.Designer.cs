@@ -40,11 +40,12 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.close = new System.Windows.Forms.Label();
             this.loggedinpanel = new System.Windows.Forms.Panel();
+            this.OpenSite = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.ConfigurePrinter = new System.Windows.Forms.Label();
             this.ConnectionStatus = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.OpenSite = new System.Windows.Forms.Button();
+            this.ShowDownButton = new System.Windows.Forms.Label();
             this.loginpanel.SuspendLayout();
             this.loggedinpanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -156,6 +157,7 @@
             // 
             // loggedinpanel
             // 
+            this.loggedinpanel.Controls.Add(this.ShowDownButton);
             this.loggedinpanel.Controls.Add(this.OpenSite);
             this.loggedinpanel.Controls.Add(this.label4);
             this.loggedinpanel.Controls.Add(this.ConfigurePrinter);
@@ -166,13 +168,27 @@
             this.loggedinpanel.TabIndex = 1;
             this.loggedinpanel.Visible = false;
             // 
+            // OpenSite
+            // 
+            this.OpenSite.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.OpenSite.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.OpenSite.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OpenSite.ForeColor = System.Drawing.Color.White;
+            this.OpenSite.Location = new System.Drawing.Point(16, 114);
+            this.OpenSite.Name = "OpenSite";
+            this.OpenSite.Size = new System.Drawing.Size(336, 52);
+            this.OpenSite.TabIndex = 5;
+            this.OpenSite.Text = "Open Management Site";
+            this.OpenSite.UseVisualStyleBackColor = true;
+            this.OpenSite.Click += new System.EventHandler(this.OpenSite_Click);
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Cursor = System.Windows.Forms.Cursors.Hand;
             this.label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(283, 184);
+            this.label4.Location = new System.Drawing.Point(133, 187);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(69, 13);
             this.label4.TabIndex = 4;
@@ -185,7 +201,7 @@
             this.ConfigurePrinter.Cursor = System.Windows.Forms.Cursors.Hand;
             this.ConfigurePrinter.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ConfigurePrinter.ForeColor = System.Drawing.Color.White;
-            this.ConfigurePrinter.Location = new System.Drawing.Point(168, 184);
+            this.ConfigurePrinter.Location = new System.Drawing.Point(18, 187);
             this.ConfigurePrinter.Name = "ConfigurePrinter";
             this.ConfigurePrinter.Size = new System.Drawing.Size(105, 13);
             this.ConfigurePrinter.TabIndex = 3;
@@ -213,19 +229,18 @@
             this.pictureBox1.TabIndex = 5;
             this.pictureBox1.TabStop = false;
             // 
-            // OpenSite
+            // ShowDownButton
             // 
-            this.OpenSite.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.OpenSite.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.OpenSite.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.OpenSite.ForeColor = System.Drawing.Color.White;
-            this.OpenSite.Location = new System.Drawing.Point(16, 114);
-            this.OpenSite.Name = "OpenSite";
-            this.OpenSite.Size = new System.Drawing.Size(336, 52);
-            this.OpenSite.TabIndex = 5;
-            this.OpenSite.Text = "Open Management Site";
-            this.OpenSite.UseVisualStyleBackColor = true;
-            this.OpenSite.Click += new System.EventHandler(this.OpenSite_Click);
+            this.ShowDownButton.AutoSize = true;
+            this.ShowDownButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ShowDownButton.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ShowDownButton.ForeColor = System.Drawing.Color.White;
+            this.ShowDownButton.Location = new System.Drawing.Point(289, 187);
+            this.ShowDownButton.Name = "ShowDownButton";
+            this.ShowDownButton.Size = new System.Drawing.Size(63, 13);
+            this.ShowDownButton.TabIndex = 6;
+            this.ShowDownButton.Text = "Shutdown";
+            this.ShowDownButton.Click += new System.EventHandler(this.ShowDownButton_Click);
             // 
             // MainForm
             // 
@@ -274,6 +289,7 @@
         private System.Windows.Forms.Label ConfigurePrinter;
         private System.Windows.Forms.Label loginError;
         private System.Windows.Forms.Button OpenSite;
+        private System.Windows.Forms.Label ShowDownButton;
     }
 }
 

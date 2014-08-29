@@ -29,7 +29,7 @@ namespace OpenRest
         private static string PASSWORD = "password";
         private static string PRINTED = "printed";
 
-private static string VERSION = "0.2";
+private static string VERSION = "0.4";
 
         private WebBrowser browser = new WebBrowser();
         private com.openrest.v1_1.OpenrestClient client = new com.openrest.v1_1.OpenrestClient(new System.Uri("https://api.openrest.com/v1.1"));
@@ -168,6 +168,11 @@ private static string VERSION = "0.2";
                         }
                         catch (Exception e) { }
                     }
+                }
+
+                if (!System.IO.File.Exists("OpenRest.ex_"))
+                {
+                    return;
                 }
 
                 if (!System.IO.File.Exists("install.bat"))

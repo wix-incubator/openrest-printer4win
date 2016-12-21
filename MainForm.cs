@@ -32,7 +32,7 @@ namespace OpenRest
 private static string VERSION = "1";
 
         private WebBrowser browser = new WebBrowser();
-        private com.openrest.v1_1.OpenrestClient client = new com.openrest.v1_1.OpenrestClient(new System.Uri("https://api.openrest.com/v1.1"));
+        private com.openrest.v1_1.OpenrestClient client = new com.openrest.v1_1.OpenrestClient(new System.Uri("https://api.wixrestaurants.com/v1.1"));
 
         private static readonly DateTime EPOCH = new DateTime(1970,1,1,0,0,0);
 
